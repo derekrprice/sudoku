@@ -8,12 +8,21 @@ interface BoardContextInterface {
     newPuzzle: Function;
     reset: Function;
     setCell: Function;
-    setDifficulty: Function;
     solve: Function;
     validate: Function;
 }
 
-const BoardContext = createContext<BoardContextInterface | null>(null);
+const defaultBoardContext = {
+    difficulty: "medium",
+    puzzle: new Board(),
+    newPuzzle: () => {},
+    reset: () => {},
+    setCell: () => {},
+    solve: () => {},
+    validate: () => {},
+};
+
+const BoardContext = createContext<BoardContextInterface>(defaultBoardContext);
 
 export const useSudokuBoardContext = () => useContext(BoardContext);
 
@@ -52,8 +61,8 @@ export const SudokuBoardProvider = ({children}: {children: ReactNode}) => {
                 newPuzzle: (difficulty: string) => renewPuzzle(difficulty, setDifficulty, setPuzzle),
                 reset: () => setPuzzle(puzzle.clear()),
                 setCell: (id: string, value: number) => setPuzzle(puzzle.setCell(id, value)),
-                solve: () => solvePuzzle(),
-                validate: () => validatePuzzle(),
+                solve: () => solvePuzzle(setPuzzle),
+                validate: () => validatePuzzle(setPuzzle),
             }}
         >
             {children}

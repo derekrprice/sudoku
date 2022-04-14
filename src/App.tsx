@@ -1,10 +1,10 @@
-import React, {KeyboardEvent} from 'react';
+import React, {KeyboardEvent, useState} from 'react';
 import './App.css';
-import {Button, FormControl, Grid, InputLabel, MenuItem, Select} from "@mui/material";
+import {Button, Checkbox, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select} from "@mui/material";
 import {SudokuBoardProvider, useSudokuBoardContext} from "./contexts/sudoku-board";
 import Cell from "./puzzle/cell";
 
-const SudokuRow = ({idx, row, setCell}: {idx: string, row: Array<Cell>, setCell: Function}) => {
+const SudokuRow = ({idx, row, setCell, validate }: {idx: string, row: Array<Cell>, setCell: Function, validate?: Function | undefined}) => {
     const handleKeyPress = (cell: Cell, event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Tab") {
             return;
@@ -15,6 +15,9 @@ const SudokuRow = ({idx, row, setCell}: {idx: string, row: Array<Cell>, setCell:
             return;
         }
         setCell(cell.id, newValue);
+        if (validate) {
+            validate();
+        }
     };
 
     const cells = row.map(cell => (
@@ -33,9 +36,16 @@ const SudokuRow = ({idx, row, setCell}: {idx: string, row: Array<Cell>, setCell:
 
 const SudokuBoard = () => {
     const { difficulty, puzzle, reset, newPuzzle, setCell, solve, validate } = useSudokuBoardContext();
+    const [doValidate, setDoValidate] = useState<boolean>(false);
 
     const rows = puzzle.rows.map((row, i) => (
-        <SudokuRow idx={`${i}`} key={`${i}`} row={row} setCell={setCell}></SudokuRow>
+        <SudokuRow
+            idx={`${i}`}
+            key={`${i}`}
+            row={row}
+            setCell={setCell}
+            {...(doValidate ? {validate} : {})}
+        />
     ));
     return (
         <Grid container justifyContent="center" spacing={1}>
@@ -47,10 +57,10 @@ const SudokuBoard = () => {
             </table>
             </Grid>
             <Grid item xs={12} sm={4}>
-                <Grid container direction="column" spacing={1}>
+                <Grid container direction="column" spacing={2}>
                     <Grid item>
                         <FormControl fullWidth>
-                            <InputLabel sx={{color: "white", '& .Mui-focused': { color: "white"}}}>Difficulty</InputLabel>
+                            <InputLabel sx={{color: "white"}}>Difficulty</InputLabel>
                             <Select variant="filled" sx={{color: "white"}}
                                 value={difficulty}
                                 label="Difficulty"
@@ -64,16 +74,25 @@ const SudokuBoard = () => {
                         </FormControl>
                     </Grid>
                     <Grid item>
-                        <Button variant="contained" onClick={newPuzzle}>New Puzzle</Button>
+                        <FormControl fullWidth>
+                            <InputLabel shrink sx={{color: "white"}}>Validate</InputLabel>
+                            <FormControlLabel
+                                control={<Checkbox checked={doValidate} onChange={(event) => setDoValidate(event.target.checked)}/>}
+                                label={puzzle.status} sx={{color: doValidate ? "white" : "darkgray"}}
+                                />
+                        </FormControl>
                     </Grid>
                     <Grid item>
-                        <Button variant="contained" onClick={reset}>Clear Guesses</Button>
+                        <Button variant="contained" onClick={() => newPuzzle()}>New Puzzle</Button>
                     </Grid>
                     <Grid item>
-                        <Button variant="contained" onClick={validate}>Validate</Button>
+                        <Button variant="contained" onClick={() => reset()}>Clear Guesses</Button>
                     </Grid>
                     <Grid item>
-                        <Button variant="contained" onClick={solve}>Solve it!</Button>
+                        <Button variant="contained" onClick={() => validate()}>Validate</Button>
+                    </Grid>
+                    <Grid item>
+                        <Button variant="contained" onClick={() => solve()}>Solve it!</Button>
                     </Grid>
                 </Grid>
             </Grid>
