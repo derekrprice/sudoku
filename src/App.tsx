@@ -3,6 +3,7 @@ import './App.css';
 import {Button, Checkbox, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select} from "@mui/material";
 import {SudokuBoardProvider, useSudokuBoardContext} from "./contexts/sudoku-board";
 import Cell from "./puzzle/cell";
+import GavelIcon from "@mui/icons-material/Gavel";
 
 const SudokuRow = ({idx, row, setCell, validate }: {idx: string, row: Array<Cell>, setCell: Function, validate?: Function | undefined}) => {
     const handleKeyPress = (cell: Cell, event: KeyboardEvent<HTMLInputElement>) => {
@@ -77,9 +78,15 @@ const SudokuBoard = () => {
                         <FormControl fullWidth>
                             <InputLabel shrink sx={{color: "white"}}>Validate</InputLabel>
                             <FormControlLabel
-                                control={<Checkbox checked={doValidate} onChange={(event) => setDoValidate(event.target.checked)}/>}
-                                label={puzzle.status} sx={{color: doValidate ? "white" : "darkgray"}}
-                                />
+                                control={<Checkbox
+                                    checked={doValidate}
+                                    onChange={(event) => setDoValidate(event.target.checked)}
+                                    icon={<GavelIcon sx={{color: "darkgray"}}/>}
+                                    checkedIcon={<GavelIcon color="primary" />}
+                                />}
+                                label={puzzle.status}
+                                sx={{color: doValidate ? "white" : "#555555"}}
+                            />
                         </FormControl>
                     </Grid>
                     <Grid item>
