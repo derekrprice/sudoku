@@ -1,16 +1,13 @@
 .App {
   background-color: #282c34;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  min-width: 100vw;
   color: white;
 }
 
 .App-header {
   font-size: calc(10px + 2vmin);
-  justify-content: left;
+  /*justify-content: left;*/
 }
 
 table {
@@ -49,4 +46,15 @@ td input {
   outline: none;
   text-align: center;
   width: 2em;
+}
+
+button {
+  width: 100%;
+}
+
+/*.MuiFormControl-root {*/
+/*  background-color: #1976d2;*/
+/*}*/
+.MuiInputLabel-root.Mui-focused {
+  color: white;
 }

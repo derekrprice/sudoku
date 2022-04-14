@@ -72,35 +72,51 @@ interface BoardContextInterface {
     reset: Function;
     setCell: Function;
     setDifficulty: Function;
+    solve: Function;
+    validate: Function;
 }
 
 const BoardContext = createContext<BoardContextInterface | null>(null);
 
 export const useSudokuBoardContext = () => useContext(BoardContext);
 
+const difficulties = ["easy", "medium", "hard"];
+
+const renewPuzzle = (difficulty: string, setDifficulty: Function, setPuzzle: Function) => {
+    if (difficulty === "random") {
+        difficulty = difficulties[Math.floor(Math.random() * difficulties.length)];
+    }
+    axios.get(`https://vast-chamber-17969.herokuapp.com/generate?difficulty=${difficulty}`)
+        .then(result => {
+            setDifficulty(result.data.difficulty);
+            setPuzzle(new Board(result.data.puzzle));
+        });
+};
+
+const solvePuzzle = (setPuzzle: Function) => {
+
+};
+
+const validatePuzzle = (setPuzzle: Function) => {
+
+};
+
 export const SudokuBoardProvider = ({children}: {children: ReactNode}) => {
     const [puzzle, setPuzzle] = useState(new Board());
     const [difficulty, setDifficulty] = useState("medium");
 
-    const renewPuzzle = (difficulty: string) => {
-        axios.get(`https://vast-chamber-17969.herokuapp.com/generate?difficulty=${difficulty}`)
-            .then(result => {
-                setDifficulty(result.data.difficulty);
-                setPuzzle(new Board(result.data.puzzle));
-            });
-    };
-
-    useEffect(() => renewPuzzle("random"), []);
+    useEffect(() => renewPuzzle("random", setDifficulty, setPuzzle), []);
 
     return (
         <BoardContext.Provider
             value={{
                 difficulty,
                 puzzle,
-                newPuzzle: () => renewPuzzle(difficulty),
+                newPuzzle: (difficulty: string) => renewPuzzle(difficulty, setDifficulty, setPuzzle),
                 reset: () => setPuzzle(puzzle.clear()),
                 setCell: (id: string, value: number) => setPuzzle(puzzle.setCell(id, value)),
-                setDifficulty
+                solve: () => solvePuzzle(),
+                validate: () => validatePuzzle(),
             }}
         >
             {children}
