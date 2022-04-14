@@ -5,10 +5,18 @@ export default class Cell {
     immutable: boolean;
     value: number | null;
 
-    constructor(id: string, value: number | null = null) {
+    #column: number;
+    #row: number;
+    #square: number;
+
+    constructor(id: string, row: number, column: number, square: number, value: number | null = null) {
         this.id = id
+        this.immutable = !!value;
         this.value = value;
-        this.immutable = false;
+
+        this.#column = column;
+        this.#row = row;
+        this.#square = square;
     }
 
     static xyToID(row: number, column: number): string {
