@@ -30,12 +30,17 @@ td {
   width: 2em;
 }
 
+td.given {
+  background-color: #444444;
+  color: lightgray;
+}
+
 td:nth-child(3n) {
   border-right: 3px solid white;
 }
 
 td input {
-  background-color: #282c34;
+  background-color: transparent;
   border: none;
   color: white;
   display: flex;

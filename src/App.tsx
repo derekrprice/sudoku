@@ -1,48 +1,65 @@
-import React, {useState} from 'react';
+import React, {KeyboardEvent} from 'react';
 import './App.css';
-import {Box, Button, Grid, Grow, TextField} from "@mui/material";
+import {Button} from "@mui/material";
 import {SudokuBoardProvider, useSudokuBoardContext} from "./contexts/sudoku-board";
 import Cell from "./puzzle/cell";
 
-const SudokuRow = ({key, row, setCell}: {key: string, row: Array<Cell>, setCell: Function}) => {
-    const handleCellChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setCell(event.target.value);
+const SudokuRow = ({idx, row, setCell}: {idx: string, row: Array<Cell>, setCell: Function}) => {
+    const handleKeyPress = (cell: Cell, event: KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === "Tab") {
+            return;
+        }
+        const newValue = parseInt(event.key);
+        if (!newValue) {
+            event.preventDefault();
+            return;
+        }
+        setCell(cell.id, newValue);
     };
 
-    const cells = row.map((cell, i) => (
-        <td key={i}>
+    const cells = row.map(cell => (
+        <td key={cell.id} className={cell.immutable ? 'given' : 'editable'}>
             <input type="text"
-                onChange={handleCellChange}
-            >{cell.value}</input>
+                   value={cell.value ?? ''}
+                   disabled={cell.immutable}
+                   onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => handleKeyPress(cell, event)}
+                   onChange={() => {/*avoid a react warning*/}}
+            />
         </td>
     ));
 
-    return <tr key={key}>{cells}</tr>;
+    return <tr key={idx}>{cells}</tr>;
 };
 
 const SudokuBoard = () => {
-    const { puzzle, reset, setCell } = useSudokuBoardContext();
+    const { puzzle, reset, newPuzzle, setCell } = useSudokuBoardContext();
 
-  return (
-      <>
-          <table className="sudokuBoard">
-              {puzzle.rows.map((row, i) => (<SudokuRow key={i} row={row} setCell={setCell}></SudokuRow>))}
-          </table>
-          <Button variant="contained">Reset</Button>
-      </>
-  )
+    const rows = puzzle.rows.map((row, i) => (
+        <SudokuRow idx={`${i}`} key={`${i}`} row={row} setCell={setCell}></SudokuRow>
+    ));
+    return (
+        <>
+            <table className="sudokuBoard">
+                <tbody>
+                    {rows}
+                </tbody>
+            </table>
+            <Button variant="contained" onClick={reset}>Clear Guesses</Button>
+            <Button variant="contained" onClick={newPuzzle}>New Puzzle</Button>
+        </>
+    )
 };
 
 function App() {
   return (
+      <SudokuBoardProvider>
     <div className="App">
       <header className="App-header">
           Sudoku!
       </header>
-          <SudokuBoardProvider>
             <SudokuBoard></SudokuBoard>
-          </SudokuBoardProvider>
     </div>
+      </SudokuBoardProvider>
   );
 }
 
