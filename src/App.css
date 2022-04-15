@@ -27,6 +27,9 @@ td {
   width: 2em;
 }
 
+td.broken {
+  background-color: darkred;
+}
 td.given {
   background-color: #444444;
   color: lightgray;

@@ -39,19 +39,19 @@ const renewPuzzle = (difficulty: string, setDifficulty: Function, setPuzzle: Fun
         });
 };
 
-const solvePuzzle = (setPuzzle: Function) => {
+const solvePuzzle = (puzzle: Board, setPuzzle: Function) => {
 
 };
 
-const validatePuzzle = (setPuzzle: Function) => {
-
+const validatePuzzle = (doIt: boolean, puzzle: Board, setPuzzle: Function) => {
+    setPuzzle(puzzle.validate(doIt));
 };
 
 export const SudokuBoardProvider = ({children}: {children: ReactNode}) => {
     const [puzzle, setPuzzle] = useState(new Board());
-    const [difficulty, setDifficulty] = useState("medium");
+    const [difficulty, setDifficulty] = useState(defaultBoardContext.difficulty);
 
-    useEffect(() => renewPuzzle("random", setDifficulty, setPuzzle), []);
+    useEffect(() => renewPuzzle(difficulty, setDifficulty, setPuzzle), []);
 
     return (
         <BoardContext.Provider
@@ -61,8 +61,8 @@ export const SudokuBoardProvider = ({children}: {children: ReactNode}) => {
                 newPuzzle: (difficulty: string) => renewPuzzle(difficulty, setDifficulty, setPuzzle),
                 reset: () => setPuzzle(puzzle.clear()),
                 setCell: (id: string, value: number) => setPuzzle(puzzle.setCell(id, value)),
-                solve: () => solvePuzzle(setPuzzle),
-                validate: () => validatePuzzle(setPuzzle),
+                solve: () => solvePuzzle(puzzle, setPuzzle),
+                validate: (doIt: boolean) => validatePuzzle(doIt, puzzle, setPuzzle),
             }}
         >
             {children}

@@ -26,27 +26,14 @@ export default class Board {
         for (let i = 0; i < 9; i++) {
             this.#rows[i] = [];
             for (let j = 0; j < 9; j++) {
-                const sq = ((9 * i + j) / 3) >> 0;
+                const sq = Math.floor(i / 3) * 3 + Math.floor(j / 3);
                 this.#columns[j] ||= [];
                 this.#squares[sq] ||= [];
                 const coord = Cell.xyToID(i, j);
-                const newCell = new Cell(coord, i, j, sq, initializer[coord] || null);
-                this.#squares[sq][this.#squares.length] = this.#index[coord] = this.#rows[i][j] = this.#columns[j][i] = newCell;
+                const newCell = new Cell(coord, i, j, sq, parseInt(initializer[coord]) || null);
+                this.#squares[sq][this.#squares[sq].length] = this.#index[coord] = this.#rows[i][j] = this.#columns[j][i] = newCell;
             }
         }
-    }
-
-    clear() {
-        for(const cell of Object.values<Cell>(this.#index)) {
-            if (!cell.immutable) {
-                cell.value = null;
-            }
-        }
-        return this.clone();
-    }
-
-    clone() {
-        return new Board(this);
     }
 
     get cells() {
@@ -69,9 +56,51 @@ export default class Board {
         return this.#status;
     }
 
+    clear() {
+        for(const cell of Object.values<Cell>(this.#index)) {
+            if (!cell.immutable) {
+                cell.value = null;
+            }
+        }
+        return this.clone();
+    }
+
+    clone() {
+        return new Board(this);
+    }
+
     setCell(id: string, value: any, immutable: boolean = false) {
         this.#index[id].immutable = immutable;
         this.#index[id].value = value;
         return this.clone();
+    }
+
+    validate(doIt: boolean) {
+        let broken = false;
+        let full = true;
+        for (const cell of Object.values<Cell>(this.#index)) {
+            full &&= !!cell.value;
+            cell.broken = doIt && !cell.immutable && !!cell.value && this.#checkCell(cell);
+            broken ||= cell.broken;
+        }
+        if (doIt) {
+            this.#status = broken ? "broken" : full ? "solved" : "unsolved";
+        }
+        return this.clone();
+    }
+
+    #checkCell(cell: Cell, value: number | null = null) {
+        if (!value) {
+            value = cell.value
+        }
+        const column = this.#columns[cell.column];
+        const row = this.#rows[cell.row];
+        const square = this.#squares[cell.square];
+        const equalsCell = (cohort: Cell) => cell.id !== cohort.id && cohort.value === value;
+        return (
+            column.some(equalsCell)
+            || row.some(equalsCell)
+            || square.some(equalsCell)
+        );
     }
 }

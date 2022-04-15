@@ -1,4 +1,4 @@
-import React, {KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import './App.css';
 import {Button, Checkbox, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select} from "@mui/material";
 import {SudokuBoardProvider, useSudokuBoardContext} from "./contexts/sudoku-board";
@@ -10,19 +10,25 @@ const SudokuRow = ({idx, row, setCell, validate }: {idx: string, row: Array<Cell
         if (event.key === "Tab") {
             return;
         }
-        const newValue = parseInt(event.key);
-        if (!newValue) {
-            event.preventDefault();
-            return;
+
+        if (["Backspace", "Delete", "0"].includes(event.key)) {
+            setCell(cell.id, null);
+        } else {
+            const newValue = parseInt(event.key);
+            if (!newValue) {
+                event.preventDefault();
+                return;
+            }
+            setCell(cell.id, newValue);
         }
-        setCell(cell.id, newValue);
+
         if (validate) {
-            validate();
+            validate(true);
         }
     };
 
     const cells = row.map(cell => (
-        <td key={cell.id} className={cell.immutable ? 'given' : 'editable'}>
+        <td key={cell.id} className={cell.immutable ? 'given' : cell.broken ? "broken" : 'editable'}>
             <input type="text"
                    value={cell.value ?? ''}
                    disabled={cell.immutable}
@@ -48,6 +54,12 @@ const SudokuBoard = () => {
             {...(doValidate ? {validate} : {})}
         />
     ));
+
+    const handleValidateClick = (event: ChangeEvent<HTMLInputElement>) => {
+        validate(event.target.checked);
+        setDoValidate(event.target.checked);
+    };
+
     return (
         <Grid container justifyContent="center" spacing={1}>
             <Grid item xs={12} sm={8}>
@@ -80,8 +92,7 @@ const SudokuBoard = () => {
                             <FormControlLabel
                                 control={<Checkbox
                                     checked={doValidate}
-                                    onChange={(event) => setDoValidate(event.target.checked)}
-                                    icon={<GavelIcon sx={{color: "darkgray"}}/>}
+                                    onChange={handleValidateClick}
                                     checkedIcon={<GavelIcon color="primary" />}
                                 />}
                                 label={puzzle.status}
@@ -94,9 +105,6 @@ const SudokuBoard = () => {
                     </Grid>
                     <Grid item>
                         <Button variant="contained" onClick={() => reset()}>Clear Guesses</Button>
-                    </Grid>
-                    <Grid item>
-                        <Button variant="contained" onClick={() => validate()}>Validate</Button>
                     </Grid>
                     <Grid item>
                         <Button variant="contained" onClick={() => solve()}>Solve it!</Button>
