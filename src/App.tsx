@@ -87,18 +87,18 @@ const SudokuBoard = () => {
                         </FormControl>
                     </Grid>
                     <Grid item>
-                        <FormControl fullWidth>
                             <InputLabel shrink sx={{color: "white"}}>Validate</InputLabel>
                             <FormControlLabel
                                 control={<Checkbox
                                     checked={doValidate}
                                     onChange={handleValidateClick}
-                                    checkedIcon={<GavelIcon color="primary" />}
+                                    checkedIcon={<GavelIcon sx={{color: "white"}} />}
+                                    icon={<GavelIcon color="primary" />}
+                                    sx={{border: "1px solid white", "border-radius": "4px", ...(doValidate ? {"background-color": "#1976d2"} : {})}}
                                 />}
                                 label={puzzle.status}
-                                sx={{color: doValidate ? "white" : "#555555"}}
+                                sx={{color: doValidate ? "white" : "#555555", "margin-left": 0, "& span": {"margin-left": "10px"}}}
                             />
-                        </FormControl>
                     </Grid>
                     <Grid item>
                         <Button variant="contained" onClick={() => newPuzzle()}>New Puzzle</Button>

@@ -13,7 +13,7 @@ interface BoardContextInterface {
 }
 
 const defaultBoardContext = {
-    difficulty: "medium",
+    difficulty: "random",
     puzzle: new Board(),
     newPuzzle: () => {},
     reset: () => {},
@@ -40,7 +40,7 @@ const renewPuzzle = (difficulty: string, setDifficulty: Function, setPuzzle: Fun
 };
 
 const solvePuzzle = (puzzle: Board, setPuzzle: Function) => {
-
+    setPuzzle(puzzle.solve());
 };
 
 const validatePuzzle = (doIt: boolean, puzzle: Board, setPuzzle: Function) => {
