@@ -116,11 +116,14 @@ export default class Board {
         let full = true;
         for (const cell of Object.values<Cell>(this.#index)) {
             full &&= !!cell.value;
-            cell.broken = doIt && !cell.immutable && !!cell.value && this.#checkCell(cell, cell.value);
-            broken ||= cell.broken;
+            const cellBroken = !cell.immutable && !!cell.value && this.#checkCell(cell, cell.value);
+            cell.broken = doIt && cellBroken;
+            broken ||= cellBroken;
         }
-        if (doIt) {
-            this.#status = broken ? "broken" : full ? "solved" : "unsolved";
+        if (full && !broken) {
+            this.#status = "solved";
+        } else if (doIt) {
+            this.#status = broken ? "broken" : "unsolved";
         }
         return this.clone();
     }

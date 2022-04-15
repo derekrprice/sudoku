@@ -6,7 +6,7 @@ import Cell from "./puzzle/cell";
 import GavelIcon from "@mui/icons-material/Gavel";
 import fx from 'fireworks'
 
-const SudokuRow = ({idx, row, setCell, validate }: {idx: string, row: Array<Cell>, setCell: Function, validate?: Function | undefined}) => {
+const SudokuRow = ({idx, row, setCell, doValidate, validate }: {idx: string, row: Array<Cell>, setCell: Function, doValidate: boolean, validate: Function }) => {
     const handleKeyPress = (cell: Cell, event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Tab") {
             return;
@@ -23,9 +23,7 @@ const SudokuRow = ({idx, row, setCell, validate }: {idx: string, row: Array<Cell
             setCell(cell.id, newValue);
         }
 
-        if (validate) {
-            validate(true);
-        }
+        validate(doValidate);
     };
 
     const cells = row.map(cell => (
@@ -52,7 +50,7 @@ const SudokuBoard = () => {
             key={`${i}`}
             row={row}
             setCell={setCell}
-            {...(doValidate ? {validate} : {})}
+            {...{doValidate, validate}}
         />
     ));
 
@@ -67,10 +65,10 @@ const SudokuBoard = () => {
             return;
         }
 
-        range(6).map(() =>
+        range(19).map(() =>
             fx({
-                x: Math.random() * window.innerWidth / 2 + window.innerWidth / 4,
-                y: Math.random() * window.innerWidth / 2 + window.innerWidth / 4,
+                x: Math.random() * window.innerWidth / 2 + window.innerWidth / 8,
+                y: Math.random() * window.innerWidth / 2 + window.innerWidth / 8,
                 colors: ['#cc3333', '#ecde60', '#213ec1', '#82e152', '#9752e1'],
             })
         )
