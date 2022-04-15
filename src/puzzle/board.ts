@@ -124,6 +124,8 @@ export default class Board {
             this.#status = "solved";
         } else if (doIt) {
             this.#status = broken ? "broken" : "unsolved";
+        } else {
+            this.#status = "unsolved";
         }
         return this.clone();
     }
