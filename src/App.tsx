@@ -7,7 +7,7 @@ import {
     FormControlLabel,
     Grid,
     InputLabel, Link,
-    MenuItem, Popover,
+    MenuItem,
     Select,
     Typography
 } from "@mui/material";
@@ -142,56 +142,33 @@ const SudokuBoard = () => {
     )
 };
 
-function App() {
-    const [jokeAnchor, setJokeAnchor] = useState<HTMLElement | null>(null);
-    const handleJokeOpen = (event: React.MouseEvent<HTMLElement>) => setJokeAnchor(event.currentTarget);
-    const handleJokeClose = () => setJokeAnchor(null);
-
-    return (
-        <SudokuBoardProvider>
-            <Grid container justifyContent="center" alignItems="center" className="App">
-                <Grid item>
-                    <Grid container direction="column" spacing={2}>
-                        <Grid item xs>
-                            <Typography variant="h2" className="App-header" onMouseEnter={handleJokeOpen} onMouseLeave={handleJokeClose}>
-                                Sudoku!
-                            </Typography>
-                            <Popover
-                                open={!!jokeAnchor}
-                                anchorEl={jokeAnchor}
-                                anchorOrigin={{vertical: 'top', horizontal: 'right',}}
-                                transformOrigin={{vertical: 'bottom', horizontal: 'right',}}
-                                anchorPosition={{top: 150, left: 0}}
-                                onClose={handleJokeClose}
-                                disableRestoreFocus
-                                sx={{"pointer-events": "none"}}
-                                PaperProps={{sx: {"border-radius": "48px"}}}
-                            >
-                                <Typography id="Joke" variant="body1">
-                                    The guy who invented Sudoku actually really hated numbers.
-                                </Typography>
-                                <Typography id="Punchline" variant="body2">
-                                    He just wanted to put them in their place.  🥁🥁🥁
-                                </Typography>
-                            </Popover>
-                        </Grid>
-                        <Grid item>
-                            <SudokuBoard></SudokuBoard>
-                        </Grid>
-                        <Grid item container justifyContent="right">
-                            <Grid item xs={3}>
-                            <Link
-                                onMouseEnter={() => launchFireworks(16)}
-                                target="_blank" rel="noopener"
-                                href="https://docs.google.com/document/d/1O1HbMJgIAVcBQXBuCiXEo847x3lTTaZ7BWDAhxypDmk"
-                            >by Derek Price</Link>
-                            </Grid>
+const App = () => (
+    <SudokuBoardProvider>
+        <Grid container justifyContent="center" alignItems="center" className="App">
+            <Grid item>
+                <Grid container direction="column" spacing={2}>
+                    <Grid item xs>
+                        <Typography variant="h2" className="App-header">
+                            Sudoku!
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <SudokuBoard></SudokuBoard>
+                    </Grid>
+                    <Grid item container justifyContent="right">
+                        <Grid item xs={3}>
+                        <Link
+                            onMouseEnter={() => launchFireworks(16)}
+                            target="_blank" rel="noopener"
+                            href="https://docs.google.com/document/d/1O1HbMJgIAVcBQXBuCiXEo847x3lTTaZ7BWDAhxypDmk"
+                        >by Derek Price</Link>
                         </Grid>
                     </Grid>
                 </Grid>
             </Grid>
-        </SudokuBoardProvider>
-    );
-}
+        </Grid>
+    </SudokuBoardProvider>
+);
+
 
 export default App;
