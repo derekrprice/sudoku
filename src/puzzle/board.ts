@@ -66,6 +66,7 @@ export default class Board {
                 cell.broken = false;
             }
         }
+        this.#status = "unsolved";
         return this.clone();
     }
 
@@ -101,7 +102,8 @@ export default class Board {
         }
 
         const unsolved = Object.values<Cell>(this.#index).filter(cell => !cell.value);
-        return this.#search(unsolved) || this;
+        this.#search(unsolved);
+        return this.validate(true);
     }
 
     /**
@@ -143,10 +145,10 @@ export default class Board {
         );
     }
 
-    #search(emptyCells: Array<Cell>): Board | false {
+    #search(emptyCells: Array<Cell>): boolean {
         if (!emptyCells.length) {
             // Woot!  Solved!
-            return this.clone();
+            return true;
         }
 
         for (let value = 1; value <= 9; value++) {

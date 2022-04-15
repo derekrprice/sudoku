@@ -1,9 +1,10 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, useEffect, useState} from 'react';
 import './App.css';
 import {Button, Checkbox, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select} from "@mui/material";
 import {SudokuBoardProvider, useSudokuBoardContext} from "./contexts/sudoku-board";
 import Cell from "./puzzle/cell";
 import GavelIcon from "@mui/icons-material/Gavel";
+import fx from 'fireworks'
 
 const SudokuRow = ({idx, row, setCell, validate }: {idx: string, row: Array<Cell>, setCell: Function, validate?: Function | undefined}) => {
     const handleKeyPress = (cell: Cell, event: KeyboardEvent<HTMLInputElement>) => {
@@ -59,6 +60,21 @@ const SudokuBoard = () => {
         validate(event.target.checked);
         setDoValidate(event.target.checked);
     };
+
+    useEffect(() => {
+        const range = (n: number) => [...new Array(n)]
+        if (puzzle.status != "solved") {
+            return;
+        }
+
+        range(6).map(() =>
+            fx({
+                x: Math.random() * window.innerWidth / 2 + window.innerWidth / 4,
+                y: Math.random() * window.innerWidth / 2 + window.innerWidth / 4,
+                colors: ['#cc3333', '#ecde60', '#213ec1', '#82e152', '#9752e1'],
+            })
+        )
+    }, [puzzle.status]);
 
     return (
         <Grid container justifyContent="center" spacing={1}>
