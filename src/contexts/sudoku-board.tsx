@@ -58,7 +58,7 @@ export const SudokuBoardProvider = ({children}: {children: ReactNode}) => {
             value={{
                 difficulty,
                 puzzle,
-                newPuzzle: (difficulty: string) => renewPuzzle(difficulty, setDifficulty, setPuzzle),
+                newPuzzle: (newDifficulty: string = difficulty) => renewPuzzle(newDifficulty, setDifficulty, setPuzzle),
                 reset: () => setPuzzle(puzzle.clear()),
                 setCell: (id: string, value: number) => setPuzzle(puzzle.setCell(id, value)),
                 solve: () => solvePuzzle(puzzle, setPuzzle),
