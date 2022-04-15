@@ -6,7 +6,7 @@ import {
     FormControl,
     FormControlLabel,
     Grid,
-    InputLabel,
+    InputLabel, Link,
     MenuItem, Popover,
     Select,
     Typography
@@ -15,6 +15,17 @@ import {SudokuBoardProvider, useSudokuBoardContext} from "./contexts/sudoku-boar
 import Cell from "./puzzle/cell";
 import GavelIcon from "@mui/icons-material/Gavel";
 import fx from 'fireworks'
+
+const launchFireworks = (n: number) => {
+    const range = (n: number) => [...new Array(n)]
+    range(n).map(() =>
+        fx({
+            x: Math.random() * window.innerWidth / 2 + window.innerWidth / 8,
+            y: Math.random() * window.innerWidth / 2 + window.innerWidth / 8,
+            colors: ['#cc3333', '#ecde60', '#213ec1', '#82e152', '#9752e1'],
+        })
+    )
+};
 
 const SudokuRow = ({idx, row, setCell, doValidate, validate }: {idx: string, row: Array<Cell>, setCell: Function, doValidate: boolean, validate: Function }) => {
     const handleKeyPress = (cell: Cell, event: KeyboardEvent<HTMLInputElement>) => {
@@ -70,18 +81,10 @@ const SudokuBoard = () => {
     };
 
     useEffect(() => {
-        const range = (n: number) => [...new Array(n)]
         if (puzzle.status != "solved") {
             return;
         }
-
-        range(19).map(() =>
-            fx({
-                x: Math.random() * window.innerWidth / 2 + window.innerWidth / 8,
-                y: Math.random() * window.innerWidth / 2 + window.innerWidth / 8,
-                colors: ['#cc3333', '#ecde60', '#213ec1', '#82e152', '#9752e1'],
-            })
-        )
+        launchFireworks(6);
     }, [puzzle.status]);
 
     return (
@@ -150,28 +153,39 @@ function App() {
                 <Grid item>
                     <Grid container direction="column" spacing={2}>
                         <Grid item xs>
-                            <Typography variant="h2" onMouseEnter={handleJokeOpen} onMouseLeave={handleJokeClose} className="App-header">
+                            <Typography variant="h2" className="App-header" onMouseEnter={handleJokeOpen} onMouseLeave={handleJokeClose}>
                                 Sudoku!
                             </Typography>
                             <Popover
                                 open={!!jokeAnchor}
                                 anchorEl={jokeAnchor}
-                                sx={{pointerEvents: 'none',}}
-                                anchorOrigin={{vertical: 'top', horizontal: 'left',}}
-                                transformOrigin={{vertical: 'bottom', horizontal: 'left',}}
+                                anchorOrigin={{vertical: 'top', horizontal: 'right',}}
+                                transformOrigin={{vertical: 'bottom', horizontal: 'right',}}
+                                anchorPosition={{top: 150, left: 0}}
                                 onClose={handleJokeClose}
                                 disableRestoreFocus
+                                sx={{"pointer-events": "none"}}
+                                PaperProps={{sx: {"border-radius": "48px"}}}
                             >
                                 <Typography id="Joke" variant="body1">
                                     The guy who invented Sudoku actually really hated numbers.
                                 </Typography>
                                 <Typography id="Punchline" variant="body2">
-                                    He just wanted to put them in their place.
+                                    He just wanted to put them in their place.  🥁🥁🥁
                                 </Typography>
                             </Popover>
                         </Grid>
                         <Grid item>
                             <SudokuBoard></SudokuBoard>
+                        </Grid>
+                        <Grid item container justifyContent="right">
+                            <Grid item xs={3}>
+                            <Link
+                                onMouseEnter={() => launchFireworks(16)}
+                                target="_blank" rel="noopener"
+                                href="https://docs.google.com/document/d/1O1HbMJgIAVcBQXBuCiXEo847x3lTTaZ7BWDAhxypDmk"
+                            >by Derek Price</Link>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>

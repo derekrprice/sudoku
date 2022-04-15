@@ -70,10 +70,12 @@ body::-webkit-scrollbar {
 
 #Joke {
   font-weight: bold;
-  padding: 16px;
+  padding: 16px 32px;
 }
 
 #Punchline {
   font-weight: normal;
-  padding: 16px;
+  padding-bottom: 16px;
+  padding-left: 32px;
+  padding-right: 32px;
 }
