@@ -1,13 +1,8 @@
 .App {
   background-color: #282c34;
   min-height: 100vh;
-  min-width: 80vw;
+  min-width: 100vw;
   color: white;
-}
-
-.App-header {
-  font-size: calc(10px + 2vmin);
-  /*justify-content: left;*/
 }
 
 table {
@@ -71,4 +66,14 @@ body {
 
 body::-webkit-scrollbar {
   display: none; /* for Chrome, Safari, and Opera */
+}
+
+#Joke {
+  font-weight: bold;
+  padding: 16px;
+}
+
+#Punchline {
+  font-weight: normal;
+  padding: 16px;
 }

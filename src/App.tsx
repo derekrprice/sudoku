@@ -1,6 +1,16 @@
 import React, {ChangeEvent, KeyboardEvent, useEffect, useState} from 'react';
 import './App.css';
-import {Button, Checkbox, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select} from "@mui/material";
+import {
+    Button,
+    Checkbox,
+    FormControl,
+    FormControlLabel,
+    Grid,
+    InputLabel,
+    MenuItem, Popover,
+    Select,
+    Typography
+} from "@mui/material";
 import {SudokuBoardProvider, useSudokuBoardContext} from "./contexts/sudoku-board";
 import Cell from "./puzzle/cell";
 import GavelIcon from "@mui/icons-material/Gavel";
@@ -130,23 +140,44 @@ const SudokuBoard = () => {
 };
 
 function App() {
-  return (
-      <SudokuBoardProvider>
-          <Grid container justifyContent="center" alignItems="center" className="App">
-              <Grid item>
-                  <Grid container direction="column">
-                      <Grid item xs className="App-header">
-                          Sudoku!
-                      </Grid>
-                      <Grid item>
-                          <SudokuBoard></SudokuBoard>
-                      </Grid>
-                  </Grid>
-              </Grid>
-          </Grid>
+    const [jokeAnchor, setJokeAnchor] = useState<HTMLElement | null>(null);
+    const handleJokeOpen = (event: React.MouseEvent<HTMLElement>) => setJokeAnchor(event.currentTarget);
+    const handleJokeClose = () => setJokeAnchor(null);
 
-      </SudokuBoardProvider>
-  );
+    return (
+        <SudokuBoardProvider>
+            <Grid container justifyContent="center" alignItems="center" className="App">
+                <Grid item>
+                    <Grid container direction="column" spacing={2}>
+                        <Grid item xs>
+                            <Typography variant="h2" onMouseEnter={handleJokeOpen} onMouseLeave={handleJokeClose} className="App-header">
+                                Sudoku!
+                            </Typography>
+                            <Popover
+                                open={!!jokeAnchor}
+                                anchorEl={jokeAnchor}
+                                sx={{pointerEvents: 'none',}}
+                                anchorOrigin={{vertical: 'top', horizontal: 'left',}}
+                                transformOrigin={{vertical: 'bottom', horizontal: 'left',}}
+                                onClose={handleJokeClose}
+                                disableRestoreFocus
+                            >
+                                <Typography id="Joke" variant="body1">
+                                    The guy who invented Sudoku actually really hated numbers.
+                                </Typography>
+                                <Typography id="Punchline" variant="body2">
+                                    He just wanted to put them in their place.
+                                </Typography>
+                            </Popover>
+                        </Grid>
+                        <Grid item>
+                            <SudokuBoard></SudokuBoard>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </SudokuBoardProvider>
+    );
 }
 
 export default App;
