@@ -1,4 +1,4 @@
-import React, {createContext, ReactNode, useContext, useEffect, useState} from "react";
+import React, {createContext, ReactNode, useCallback, useContext, useEffect, useState} from "react";
 import Puzzle from "../puzzle/puzzle";
 import axios from "axios";
 
@@ -39,30 +39,28 @@ const renewPuzzle = (difficulty: string, setDifficulty: Function, setPuzzle: Fun
         });
 };
 
-const solvePuzzle = (puzzle: Puzzle, setPuzzle: Function) => {
-    setPuzzle(puzzle.solve());
-};
-
-const validatePuzzle = (doIt: boolean, puzzle: Puzzle, setPuzzle: Function) => {
-    setPuzzle(puzzle.validate());
-};
-
 export const SudokuBoardProvider = ({children}: {children: ReactNode}) => {
     const [puzzle, setPuzzle] = useState(new Puzzle());
     const [difficulty, setDifficulty] = useState(defaultBoardContext.difficulty);
 
     useEffect(() => renewPuzzle(difficulty, setDifficulty, setPuzzle), []);
 
+    const newPuzzle = useCallback((newDifficulty: string = difficulty) => renewPuzzle(newDifficulty, setDifficulty, setPuzzle), [puzzle, setPuzzle]);
+    const reset = useCallback(() => setPuzzle(puzzle.clone().clear()), [puzzle, setPuzzle]);
+    const setCell = useCallback((id: string, value: number) => setPuzzle(puzzle.clone().setCell(id, value)), [puzzle, setPuzzle]);
+    const solve = useCallback(() => setPuzzle(puzzle.clone().solve()), [puzzle, setPuzzle]);
+    const validate = useCallback(() => setPuzzle(puzzle.clone().validate()), [puzzle, setPuzzle]);
+
     return (
         <BoardContext.Provider
             value={{
                 difficulty,
                 puzzle,
-                newPuzzle: (newDifficulty: string = difficulty) => renewPuzzle(newDifficulty, setDifficulty, setPuzzle),
-                reset: () => setPuzzle(puzzle.clear()),
-                setCell: (id: string, value: number) => setPuzzle(puzzle.setCell(id, value)),
-                solve: () => solvePuzzle(puzzle, setPuzzle),
-                validate: (doIt: boolean) => validatePuzzle(doIt, puzzle, setPuzzle),
+                newPuzzle,
+                reset,
+                setCell,
+                solve,
+                validate,
             }}
         >
             {children}

@@ -5,8 +5,8 @@ import {
     Link,
     Typography
 } from "@mui/material";
-import {SudokuBoardProvider} from "./contexts/sudoku-board";
-import fx from 'fireworks'
+import {SudokuBoardProvider} from "./contexts/sudoku";
+import fx from 'fireworks';
 import SudokuBoard from "./components/sudoku/board";
 
 const launchFireworks = (n: number) => {

@@ -1,5 +1,5 @@
 import Cell from "../../puzzle/cell";
-import React, {KeyboardEvent} from "react";
+import React, {KeyboardEvent, memo} from "react";
 
 const Row = ({idx, row, setCell, doValidate, validate }: {idx: string, row: Array<Cell>, setCell: Function, doValidate: boolean, validate: Function }) => {
     const handleKeyPress = (cell: Cell, event: KeyboardEvent<HTMLInputElement>) => {
@@ -35,4 +35,4 @@ const Row = ({idx, row, setCell, doValidate, validate }: {idx: string, row: Arra
     return <tr key={idx}>{cells}</tr>;
 };
 
-export default Row;
+export default memo(Row);

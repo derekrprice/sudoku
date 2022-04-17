@@ -1,4 +1,4 @@
-import {useSudokuBoardContext} from "../../contexts/sudoku-board";
+import {useSudokuBoardContext} from "../../contexts/sudoku";
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {Button, Checkbox, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select} from "@mui/material";
 import GavelIcon from "@mui/icons-material/Gavel";
@@ -9,8 +9,8 @@ import Row from "./row";
  * @param doValidate
  * @param status
  */
-const getStatus = (doValidate: Boolean, status: String) =>
-    !doValidate && status !== "solved" ? "unsolved" : status;
+const getStatus = (doValidate: Boolean, status: string) =>
+    !doValidate && !["solved", "unsolvable"].includes(status) ? "unsolved" : status;
 
 const Board = ({onSolve}: {onSolve: Function}) => {
     const { difficulty, puzzle, reset, newPuzzle, setCell, solve, validate } = useSudokuBoardContext();
@@ -25,7 +25,6 @@ const Board = ({onSolve}: {onSolve: Function}) => {
     ));
 
     const handleValidateClick = (event: ChangeEvent<HTMLInputElement>) => {
-        validate(event.target.checked);
         setDoValidate(event.target.checked);
     };
 
@@ -70,10 +69,10 @@ const Board = ({onSolve}: {onSolve: Function}) => {
                                 onChange={handleValidateClick}
                                 checkedIcon={<GavelIcon sx={{color: "white"}} />}
                                 icon={<GavelIcon color="primary" />}
-                                sx={{border: "1px solid white", "border-radius": "4px", ...(doValidate ? {"background-color": "#1976d2"} : {})}}
+                                sx={{border: "1px solid white", "borderRadius": "4px", ...(doValidate ? {"backgroundColor": "#1976d2"} : {})}}
                             />}
                             label={getStatus(doValidate, puzzle.status)}
-                            sx={{color: doValidate ? "white" : "#555555", "margin-left": 0, "& span": {"margin-left": "10px"}}}
+                            sx={{color: doValidate ? "white" : "#555555", "marginLeft": 0, "& span": {"marginLeft": "10px"}}}
                         />
                     </Grid>
                     <Grid item>

@@ -47,7 +47,9 @@ export default class Puzzle {
     }
 
     /**
-     * @return a clone of this object with all the mutable cells on the board cleared.
+     * Clear all mutable cells on the board.
+     *
+     * @return this
      */
     clear(): Puzzle {
         for(const cell of Object.values<Cell>(this.#index)) {
@@ -57,7 +59,7 @@ export default class Puzzle {
             }
         }
         this.#status = "unsolved";
-        return this.clone();
+        return this;
     }
 
     /**
@@ -73,22 +75,23 @@ export default class Puzzle {
      * @param {string} id The ID of the cell to update.
      * @param {number | null} value The value to assign to this cell.
      * @param {boolean} immutable Mark this cell as read-only.  Defaults to false.
-     * @return a clone of this object, after setting value for the cell with the given id.
+     * @return this
      */
     setCell(id: string, value: number | null, immutable: boolean = false): Puzzle {
         this.#index[id].immutable = immutable;
         this.#index[id].value = value;
-        return this.clone();
+        return this;
     }
 
     /**
-     * Solve the puzzle..
+     * Solve the puzzle
+     * @return this
      */
     solve(): Puzzle {
         this.validate();
         if (this.#status === "broken") {
             this.#status = "unsolvable";
-            return this.clone();
+            return this;
         }
 
         const unsolved = Object.values<Cell>(this.#index).filter(cell => !cell.value);
@@ -98,7 +101,7 @@ export default class Puzzle {
 
     /**
      * Mark any broken cells as such and set the board status.
-     * @return a clone of this object with the updated status.
+     * @return this
      */
     validate(): Puzzle {
         let broken = false;
@@ -110,7 +113,7 @@ export default class Puzzle {
         }
 
         this.#status = full && !broken ? "solved" : broken ? "broken" : "unsolved";
-        return this.clone();
+        return this;
     }
 
     /**
