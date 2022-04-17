@@ -88,15 +88,13 @@ export default class Puzzle {
      * @return this
      */
     solve(): Puzzle {
-        this.validate();
-        if (this.#status === "broken") {
-            this.#status = "unsolvable";
-            return this;
-        }
-
         const unsolved = Object.values<Cell>(this.#index).filter(cell => !cell.value);
         this.#search(unsolved);
-        return this.validate();
+        this.validate();
+        if (this.#status !== "solved") {
+            this.#status = "unsolvable";
+        }
+        return this;
     }
 
     /**
