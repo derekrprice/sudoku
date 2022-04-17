@@ -18,11 +18,11 @@ const Row = ({idx, row, setCell, doValidate, validate }: {idx: string, row: Arra
             setCell(cell.id, newValue);
         }
 
-        validate(doValidate);
+        validate();
     };
 
     const cells = row.map(cell => (
-        <td key={cell.id} className={cell.immutable ? 'given' : cell.broken ? "broken" : 'editable'}>
+        <td key={cell.id} className={cell.immutable ? 'given' : doValidate && cell.broken ? "broken" : 'editable'}>
             <input type="text"
                    value={cell.value ?? ''}
                    disabled={cell.immutable}

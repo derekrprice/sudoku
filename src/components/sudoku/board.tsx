@@ -4,6 +4,14 @@ import {Button, Checkbox, FormControl, FormControlLabel, Grid, InputLabel, MenuI
 import GavelIcon from "@mui/icons-material/Gavel";
 import Row from "./row";
 
+/**
+ * Don't show the true board status unless validation is enabled.
+ * @param doValidate
+ * @param status
+ */
+const getStatus = (doValidate: Boolean, status: String) =>
+    !doValidate && status !== "solved" ? "unsolved" : status;
+
 const Board = ({onSolve}: {onSolve: Function}) => {
     const { difficulty, puzzle, reset, newPuzzle, setCell, solve, validate } = useSudokuBoardContext();
     const [doValidate, setDoValidate] = useState<boolean>(false);
@@ -12,9 +20,7 @@ const Board = ({onSolve}: {onSolve: Function}) => {
         <Row
             idx={`${i}`}
             key={`${i}`}
-            row={row}
-            setCell={setCell}
-            {...{doValidate, validate}}
+            {...{doValidate, row, setCell, validate}}
         />
     ));
 
@@ -66,7 +72,7 @@ const Board = ({onSolve}: {onSolve: Function}) => {
                                 icon={<GavelIcon color="primary" />}
                                 sx={{border: "1px solid white", "border-radius": "4px", ...(doValidate ? {"background-color": "#1976d2"} : {})}}
                             />}
-                            label={puzzle.status}
+                            label={getStatus(doValidate, puzzle.status)}
                             sx={{color: doValidate ? "white" : "#555555", "margin-left": 0, "& span": {"margin-left": "10px"}}}
                         />
                     </Grid>

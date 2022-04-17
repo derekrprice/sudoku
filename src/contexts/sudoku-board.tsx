@@ -1,10 +1,10 @@
 import React, {createContext, ReactNode, useContext, useEffect, useState} from "react";
-import Board from "../puzzle/board";
+import Puzzle from "../puzzle/puzzle";
 import axios from "axios";
 
 interface BoardContextInterface {
     difficulty: string;
-    puzzle: Board;
+    puzzle: Puzzle;
     newPuzzle: Function;
     reset: Function;
     setCell: Function;
@@ -14,7 +14,7 @@ interface BoardContextInterface {
 
 const defaultBoardContext = {
     difficulty: "random",
-    puzzle: new Board(),
+    puzzle: new Puzzle(),
     newPuzzle: () => {},
     reset: () => {},
     setCell: () => {},
@@ -35,20 +35,20 @@ const renewPuzzle = (difficulty: string, setDifficulty: Function, setPuzzle: Fun
     axios.get(`https://vast-chamber-17969.herokuapp.com/generate?difficulty=${difficulty}`)
         .then(result => {
             setDifficulty(result.data.difficulty);
-            setPuzzle(new Board(result.data.puzzle));
+            setPuzzle(new Puzzle(result.data.puzzle));
         });
 };
 
-const solvePuzzle = (puzzle: Board, setPuzzle: Function) => {
+const solvePuzzle = (puzzle: Puzzle, setPuzzle: Function) => {
     setPuzzle(puzzle.solve());
 };
 
-const validatePuzzle = (doIt: boolean, puzzle: Board, setPuzzle: Function) => {
-    setPuzzle(puzzle.validate(doIt));
+const validatePuzzle = (doIt: boolean, puzzle: Puzzle, setPuzzle: Function) => {
+    setPuzzle(puzzle.validate());
 };
 
 export const SudokuBoardProvider = ({children}: {children: ReactNode}) => {
-    const [puzzle, setPuzzle] = useState(new Board());
+    const [puzzle, setPuzzle] = useState(new Puzzle());
     const [difficulty, setDifficulty] = useState(defaultBoardContext.difficulty);
 
     useEffect(() => renewPuzzle(difficulty, setDifficulty, setPuzzle), []);
