@@ -95,12 +95,6 @@ describe("integration with API", () => {
     });
 
     it("solves a puzzle", async () => {
-        server.use(
-            rest.get("https://vast-chamber-17969.herokuapp.com/generate",
-                (req, res, ctx) =>
-                    res(ctx.json(hardBoard))
-            )
-        );
         render(<SudokuBoardProvider><Board></Board></SudokuBoardProvider>);
 
         const dropdown = await waitFor(() => screen.getByRole("button", {name: "Hard"}));
@@ -116,12 +110,6 @@ describe("integration with API", () => {
     });
 
     it("reports an unsolvable puzzle", async () => {
-        server.use(
-            rest.get("https://vast-chamber-17969.herokuapp.com/generate",
-                (req, res, ctx) =>
-                    res(ctx.json(hardBoard))
-            )
-        );
         render(<SudokuBoardProvider><Board></Board></SudokuBoardProvider>);
 
         const dropdown = await waitFor(() => screen.getByRole("button", {name: "Hard"}));
@@ -130,15 +118,9 @@ describe("integration with API", () => {
         fireEvent.click(screen.getByText("Solve it!"));
         await waitFor(() => screen.getByText("solved"));
 
-        fireEvent.keyDown(screen.getByRole("textbox", {name: "C7"}), {
-            target: { key: "Backspace"}
-        });
-        fireEvent.keyDown(screen.getByRole("textbox", {name: "H8"}), {
-            target: { key: "Backspace"}
-        });
-        fireEvent.keyDown(screen.getByRole("textbox", {name: "C8"}), {
-            target: { key: "4"}
-        });
+        fireEvent.keyDown(screen.getByRole("textbox", {name: "C7"}), { key: "Backspace"});
+        fireEvent.keyDown(screen.getByRole("textbox", {name: "H8"}), { key: "Backspace"});
+        fireEvent.keyDown(screen.getByRole("textbox", {name: "C8"}), { key: "4"});
         screen.getByRole("checkbox", {name: "unsolved"});
 
         fireEvent.click(screen.getByText("Solve it!"));
