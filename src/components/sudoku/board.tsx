@@ -12,7 +12,11 @@ import Row from "./row";
 const getStatus = (doValidate: Boolean, status: string) =>
     !doValidate && !["solved", "unsolvable"].includes(status) ? "unsolved" : status;
 
-const Board = ({onSolve}: {onSolve: Function}) => {
+interface BoardProps {
+    onSolve?: Function,
+}
+
+const Board: React.FC<BoardProps> = ({onSolve}) => {
     const { difficulty, puzzle, reset, newPuzzle, setCell, solve, validate } = useSudokuBoardContext();
     const [doValidate, setDoValidate] = useState<boolean>(false);
 
@@ -32,7 +36,9 @@ const Board = ({onSolve}: {onSolve: Function}) => {
         if (puzzle.status != "solved") {
             return;
         }
-        onSolve();
+        if (onSolve) {
+            onSolve();
+        }
     }, [puzzle.status]);
 
     return (
@@ -62,7 +68,7 @@ const Board = ({onSolve}: {onSolve: Function}) => {
                         </FormControl>
                     </Grid>
                     <Grid item>
-                        <InputLabel shrink sx={{color: "white"}}>Validate</InputLabel>
+                        <InputLabel sx={{color: "white", "transform": "translate(14px, -4px) scale(0.75)"}}>Validate</InputLabel>
                         <FormControlLabel
                             control={<Checkbox
                                 checked={doValidate}

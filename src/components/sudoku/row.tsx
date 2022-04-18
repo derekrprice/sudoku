@@ -24,6 +24,7 @@ const Row = ({idx, row, setCell, doValidate, validate }: {idx: string, row: Arra
     const cells = row.map(cell => (
         <td key={cell.id} className={cell.immutable ? 'given' : doValidate && cell.broken ? "broken" : 'editable'}>
             <input type="text"
+                   name={cell.id}
                    value={cell.value ?? ''}
                    disabled={cell.immutable}
                    onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => handleKeyPress(cell, event)}
