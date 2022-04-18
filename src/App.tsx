@@ -6,7 +6,7 @@ import {
     Typography
 } from "@mui/material";
 import {SudokuBoardProvider} from "./contexts/sudoku";
-import fx from 'fireworks';
+import fx from 'fireworks/lib/fireworks';
 import SudokuBoard from "./components/sudoku/board";
 
 const launchFireworks = (n: number) => {
