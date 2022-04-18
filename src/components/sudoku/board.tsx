@@ -1,7 +1,6 @@
 import {useSudokuBoardContext} from "../../contexts/sudoku";
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {Button, Checkbox, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select} from "@mui/material";
-import GavelIcon from "@mui/icons-material/Gavel";
 import Row from "./row";
 
 /**
@@ -73,12 +72,10 @@ const Board: React.FC<BoardProps> = ({onSolve}) => {
                             control={<Checkbox
                                 checked={doValidate}
                                 onChange={handleValidateClick}
-                                checkedIcon={<GavelIcon sx={{color: "white"}} />}
-                                icon={<GavelIcon color="primary" />}
-                                sx={{border: "1px solid white", "borderRadius": "4px", ...(doValidate ? {"backgroundColor": "#1976d2"} : {})}}
+                                sx={{color: "white"}}
                             />}
                             label={getStatus(doValidate, puzzle.status)}
-                            sx={{color: doValidate ? "white" : "#555555", "marginLeft": 0, "& span": {"marginLeft": "10px"}}}
+                            sx={{color: doValidate ? "white" : "#555555", "marginLeft": "-23px", height: "1.2em", "& span": {"marginLeft": "10px"}}}
                         />
                     </Grid>
                     <Grid item>
