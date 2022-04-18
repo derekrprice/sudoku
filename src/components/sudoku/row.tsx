@@ -32,6 +32,7 @@ const Row: React.FC<RowProps> = ({idx, row, setCell, doValidate, validate }) => 
     const cells = row.map(cell => (
         <td key={cell.id} className={cell.immutable ? 'given' : doValidate && cell.broken ? "broken" : 'editable'}>
             <input type="text"
+                   aria-label={cell.id}
                    name={cell.id}
                    value={cell.value ?? ''}
                    disabled={cell.immutable}

@@ -39,6 +39,7 @@ const App = () => (
                             onMouseEnter={() => launchFireworks(16)}
                             target="_blank" rel="noopener"
                             href="https://docs.google.com/document/d/1O1HbMJgIAVcBQXBuCiXEo847x3lTTaZ7BWDAhxypDmk"
+                            sx={{color: "#FFFFFF"}}
                         >by Derek Price</Link>
                         </Grid>
                     </Grid>
