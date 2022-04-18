@@ -32,13 +32,13 @@ const Board: React.FC<BoardProps> = ({onSolve}) => {
     };
 
     useEffect(() => {
-        if (puzzle.status != "solved") {
+        if (puzzle.status !== "solved") {
             return;
         }
         if (onSolve) {
             onSolve();
         }
-    }, [puzzle.status]);
+    }, [puzzle.status, onSolve]);
 
     return (
         <Grid container justifyContent="center" spacing={1}>

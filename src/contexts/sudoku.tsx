@@ -47,9 +47,9 @@ export const SudokuBoardProvider: React.FC<SudokuBoardProviderProps> = ({childre
     const [puzzle, setPuzzle] = useState(new Puzzle());
     const [difficulty, setDifficulty] = useState(defaultBoardContext.difficulty);
 
-    useEffect(() => renewPuzzle(difficulty, setDifficulty, setPuzzle), []);
+    useEffect(() => renewPuzzle(difficulty, setDifficulty, setPuzzle), []);  // eslint-disable-line react-hooks/exhaustive-deps
 
-    const newPuzzle = useCallback((newDifficulty: string = difficulty) => renewPuzzle(newDifficulty, setDifficulty, setPuzzle), [puzzle, setPuzzle]);
+    const newPuzzle = useCallback((newDifficulty: string = difficulty) => renewPuzzle(newDifficulty, setDifficulty, setPuzzle), [difficulty, setPuzzle]);
     const reset = useCallback(() => setPuzzle(puzzle.clone().clear()), [puzzle, setPuzzle]);
     const setCell = useCallback((id: string, value: number) => setPuzzle(puzzle.clone().setCell(id, value)), [puzzle, setPuzzle]);
     const solve = useCallback(() => setPuzzle(puzzle.clone().solve()), [puzzle, setPuzzle]);
