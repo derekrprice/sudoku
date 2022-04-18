@@ -1,7 +1,15 @@
 import Cell from "../../puzzle/cell";
 import React, {KeyboardEvent, memo} from "react";
 
-const Row = ({idx, row, setCell, doValidate, validate }: {idx: string, row: Array<Cell>, setCell: Function, doValidate: boolean, validate: Function }) => {
+interface RowProps {
+    idx: string;
+    row: Array<Cell>;
+    setCell: Function;
+    doValidate: boolean;
+    validate: Function;
+}
+
+const Row: React.FC<RowProps> = ({idx, row, setCell, doValidate, validate }) => {
     const handleKeyPress = (cell: Cell, event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Tab") {
             return;

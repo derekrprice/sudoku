@@ -13,7 +13,7 @@ const getStatus = (doValidate: Boolean, status: string) =>
     !doValidate && !["solved", "unsolvable"].includes(status) ? "unsolved" : status;
 
 interface BoardProps {
-    onSolve?: Function,
+    onSolve?: Function;
 }
 
 const Board: React.FC<BoardProps> = ({onSolve}) => {

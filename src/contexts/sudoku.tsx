@@ -39,7 +39,11 @@ const renewPuzzle = (difficulty: string, setDifficulty: Function, setPuzzle: Fun
         });
 };
 
-export const SudokuBoardProvider = ({children}: {children: ReactNode}) => {
+interface SudokuBoardProviderProps {
+    children: ReactNode;
+}
+
+export const SudokuBoardProvider: React.FC<SudokuBoardProviderProps> = ({children}) => {
     const [puzzle, setPuzzle] = useState(new Puzzle());
     const [difficulty, setDifficulty] = useState(defaultBoardContext.difficulty);
 
